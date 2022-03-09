@@ -23,7 +23,7 @@ Il faut avoir docker installé sur vos machines
 'docker run -p 8080:80 remixproject/remix-ide:latest'  
 127.0.0.1:8080 pour ouvrir l'ide  
 créer un nv fichier 'Marketplace.sol'  
-coller le contenu du contrat    
+coller le contenu du contrat qui se trouve dans la racine du projet    
 compilez et deployer
 copier l'adresse du contrat que vous avez deployer pour l'utiliser dans l'api  
 
