@@ -1,7 +1,7 @@
 const Web3 = require('web3');
 const web3 = new Web3(Web3.givenProvider || "http://127.0.0.1:8545");
 const contract = new web3.eth.Contract(require('./abi.json'));
-contract.options.address = '0x25A909cC90A740462FeeB8a31815cB7d725fF425';
+contract.options.address = '0xF15C6539b31eB17c609Da0d56578b7FDCe499F52';
 
 
 
@@ -14,7 +14,7 @@ exports.insertTransaction = async (trx) =>{
 
 exports.getAllTransactions = async () =>{
     data = await contract.methods.getAllTransactions().call();
-    trxs = data.filter(t => t.id != 0);
+    trxs = data.slice(0, data.length - 1);
     trxs = trxs.map(data => {
             return {
             id: data.id,
@@ -43,7 +43,7 @@ exports.getTransactionById = async (id) =>{
 
 exports.getAllTransactionsByType = async (type) => {
     const data = await contract.methods.getAllTransactionsByType(type).call();
-    trxs = data.filter(t => t.id != 0);
+    trxs = data.filter(t => t.transactionType != "");
     trxs = trxs.map(data => {
             return {
             id: data.id,
@@ -59,7 +59,7 @@ exports.getAllTransactionsByType = async (type) => {
 
 exports.getAllTransactionsForUser = async (user) =>{
     const data = await contract.methods.getAllTransactionsForUser(user).call();
-    trxs = data.filter(t => t.id != 0);
+    trxs = data.filter(t => t.from != "");
     trxs = trxs.map(data => {
             return {
             id: data.id,
