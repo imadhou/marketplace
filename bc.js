@@ -2,13 +2,14 @@ const Web3 = require('web3');
 const web3 = new Web3(Web3.givenProvider || "http://127.0.0.1:8545");
 const contract = new web3.eth.Contract(require('./abi.json'));
 contract.options.address = '0xF15C6539b31eB17c609Da0d56578b7FDCe499F52';
+const account = '0x98b387Ab36345b34eA5303b19a09c6C2eB7171fF';
 
 
 
 exports.insertTransaction = async (trx) =>{
     const data = await contract.methods
         .insertTransaction(trx.from, trx.to, trx.price, trx.item, trx.transactionType)
-        .send({ from: "0x98b387Ab36345b34eA5303b19a09c6C2eB7171fF" });
+        .send({ from: account });
         return data;
 }
 
