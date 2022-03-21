@@ -89,10 +89,10 @@ exports.listenToInsertedEvents = async ()=>{
     };
     
     contract.events.insertedTransaction(options)
-    .on('data', event => console.log(event))
-    .on('changed', changed => console.log(changed))
-    .on('error', err => console.log(err))
-    .on('connected', str => console.log(str))
+    .on('data', event => console.log('data',event))
+    .on('changed', changed => console.log('changed',changed))
+    .on('error', err => console.log('error',err))
+    .on('connected', str => console.log('connected',str))
 }
 
 
@@ -101,7 +101,7 @@ exports.listenToInsertedEvents = async ()=>{
 // exports.getAllTransactions();
 // exports.getTransactionsByDbIds([5,6,7])
 // exports.addTransaction({dbId: 30, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
-// exports.addTransaction({dbId: 31, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
-// exports.addTransaction({dbId: 32, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
-// exports.addTransaction({dbId: 33, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
+// exports.addTransaction({dbId: 51, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
+// exports.addTransaction({dbId: 52, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
+// exports.addTransaction({dbId: 53, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
 // exports.listenToInsertedEvents();
