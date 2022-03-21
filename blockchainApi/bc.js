@@ -100,8 +100,8 @@ exports.listenToInsertedEvents = async ()=>{
 // exports.getTransactionById(2)
 // exports.getAllTransactions();
 // exports.getTransactionsByDbIds([5,6,7])
-// exports.addTransaction({dbId: 30, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
-// exports.addTransaction({dbId: 51, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
-// exports.addTransaction({dbId: 52, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
-// exports.addTransaction({dbId: 53, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
-// exports.listenToInsertedEvents();
+exports.addTransaction({dbId: 30, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
+exports.addTransaction({dbId: 51, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
+exports.addTransaction({dbId: 52, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
+exports.addTransaction({dbId: 53, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
+exports.listenToInsertedEvents();

@@ -32,6 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-blockchainApi/bc
+blockchainApi/bcData
 blockchainApi/node_modules
 

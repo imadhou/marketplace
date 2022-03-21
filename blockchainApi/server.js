@@ -4,7 +4,6 @@ const app = express();
 const bc = require('./bc')
 router = require('./router')
 
-require('dotenv').config();
 
 app.use(bodyParser.json());
 app.use('/api',router)
