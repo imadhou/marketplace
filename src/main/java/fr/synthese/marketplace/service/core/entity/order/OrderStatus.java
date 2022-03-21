@@ -1,4 +1,4 @@
-package fr.synthese.marketplace.service.core.order;
+package fr.synthese.marketplace.service.core.entity.order;
 
 public enum OrderStatus {
 

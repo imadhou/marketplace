@@ -1,7 +1,7 @@
-package fr.synthese.marketplace.service.service;
+package fr.synthese.marketplace.service.core.service;
 
-import fr.synthese.marketplace.service.core.user.User;
-import fr.synthese.marketplace.service.repository.UserRepository;
+import fr.synthese.marketplace.service.core.entity.user.User;
+import fr.synthese.marketplace.service.core.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private UserRepository repository;
+    private final UserRepository repository;
 
     public UserService(UserRepository userRepository) {
         this.repository = userRepository;

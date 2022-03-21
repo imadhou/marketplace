@@ -1,4 +1,4 @@
-package fr.synthese.marketplace.service.core.product;
+package fr.synthese.marketplace.service.core.entity.product;
 
 public enum ReductionStrategy {
 

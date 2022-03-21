@@ -1,8 +1,8 @@
-package fr.synthese.marketplace.service.core.lineCart;
+package fr.synthese.marketplace.service.core.entity.lineCart;
 
-import fr.synthese.marketplace.service.core.cart.Cart;
-import fr.synthese.marketplace.service.core.order.Order;
-import fr.synthese.marketplace.service.core.product.Product;
+import fr.synthese.marketplace.service.core.entity.cart.Cart;
+import fr.synthese.marketplace.service.core.entity.order.Order;
+import fr.synthese.marketplace.service.core.entity.product.Product;
 import lombok.Data;
 
 import javax.persistence.*;

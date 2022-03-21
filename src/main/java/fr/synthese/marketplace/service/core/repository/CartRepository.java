@@ -1,6 +1,6 @@
-package fr.synthese.marketplace.service.repository;
+package fr.synthese.marketplace.service.core.repository;
 
-import fr.synthese.marketplace.service.core.cart.Cart;
+import fr.synthese.marketplace.service.core.entity.cart.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

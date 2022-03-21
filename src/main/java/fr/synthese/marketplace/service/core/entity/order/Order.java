@@ -1,6 +1,6 @@
-package fr.synthese.marketplace.service.core.order;
+package fr.synthese.marketplace.service.core.entity.order;
 
-import fr.synthese.marketplace.service.core.user.User;
+import fr.synthese.marketplace.service.core.entity.user.User;
 import lombok.Data;
 
 import javax.persistence.*;
