@@ -8,6 +8,7 @@
         "web3": "^1.7.1"
     },
     "scripts": {
-        "deploy": "node deploy.js"
+        "deploy": "node deploy.js",
+        "start": "node server.js"
     }
 }

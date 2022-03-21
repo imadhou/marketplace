@@ -1,4 +1,9 @@
 # marketplace  
+
+## après avoir suivi les instructions ci-sesous lancer les deux commandes suivantes:  
+- npm run deploy : pour deployer le smart contract
+- npm start : pour lancer le serveur
+
 ## 1-1 installer geth:
 En linux 'sudo apt-install ethereum'  
 En windows 'voir le site de etheruem'  
@@ -49,8 +54,9 @@ vouls allez le trouver dans /bcData/keystore
 
   pour acceder à l'api : 127.0.0.1:3000  
 
-  GET api/transactions/ -> getAllTransactions()
-  GET api/transactions/:id -> getAllTransactionsById(id) 
-  POST api/transactions -> insertTransaction(transaction: Transaction)
-  GET api/transactions/users/:user -> getAllTransactionsForUser(user: string)
-  GET api/tranactions/types/:type -> getAllTransactionsByType(type: string)
+ 
+- post('api/transactions' => addTransaction({dbId: 30, from: "a", to: "b", itemId: 5, price: 500, txType: 5}))
+- get('api/transactions' => getAllTransactions());
+- get('api/transactions/:id' => getTransactionById(5));
+- post('api/transactions/dbIds'  =>  getTransactionsByDbIds([5,6,7]));
+- post 'api/transactions/query'  => getTransactionsByquery({from: "a", to: "", txType: -1}));
