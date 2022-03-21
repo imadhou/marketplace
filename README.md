@@ -2,7 +2,8 @@
 ## 1-1 installer geth:
 En linux 'sudo apt-install ethereum'  
 En windows 'voir le site de etheruem'  
-### 1-2  
+### 1-2 
+
 création d'un répertoire pour les données:   
 'mkdir bcData'  
 'cd bcData'  

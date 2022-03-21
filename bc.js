@@ -1,31 +1,33 @@
+require('dotenv').config();
 const Web3 = require('web3');
-const web3 = new Web3(Web3.givenProvider || "http://127.0.0.1:8545");
+const web3 = new Web3(Web3.givenProvider || process.env.WSPROVIDER);
+
+
 const contract = new web3.eth.Contract(require('./abi.json'));
-contract.options.address = '0xF15C6539b31eB17c609Da0d56578b7FDCe499F52';
-const account = '0x98b387Ab36345b34eA5303b19a09c6C2eB7171fF';
+contract.options.address = process.env.ADDRESS;
+const account = process.env.ACCOUNT;
 
 
-
-exports.insertTransaction = async (trx) =>{
-    const data = await contract.methods
-        .insertTransaction(trx.from, trx.to, trx.price, trx.item, trx.transactionType)
+exports.addTransaction = async (trx) =>{
+    contract.methods
+        .addTransaction(dbId= trx.dbId, from= trx.from, to= trx.to, itemId= trx.itemId, price= trx.price, txType= trx.txType, date= Math.round((new Date()).getTime()/1000))
         .send({ from: account });
-        return data;
 }
 
 exports.getAllTransactions = async () =>{
     data = await contract.methods.getAllTransactions().call();
-    trxs = data.slice(0, data.length - 1);
-    trxs = trxs.map(data => {
+    const trxs = data.map(data => {
             return {
             id: data.id,
             from: data.from,
             to: data.to,
+            itemId: data.itemId,
             price: data.price,
-            item: data.item,
-            transactionType: data.transactionType
+            txType: data.txType,
+            date: new Date(data.date * 1000)
         }
     });
+    console.log(trxs)
     return trxs;
 }
 
@@ -35,41 +37,71 @@ exports.getTransactionById = async (id) =>{
         id: data.id,
         from: data.from,
         to: data.to,
+        itemId: data.itemId,
         price: data.price,
-        item: data.item,
-        transactionType: data.transactionType
+        txType: data.txType,
+        date: new Date(data.date * 1000)
     };
+    console.log(trx)
     return trx;
 }
 
-exports.getAllTransactionsByType = async (type) => {
-    const data = await contract.methods.getAllTransactionsByType(type).call();
-    trxs = data.filter(t => t.transactionType != "");
-    trxs = trxs.map(data => {
+exports.query = async (q) => {
+    const data = await contract.methods.query(from=q.from? q.from: "", to=q.to? q.to: "", txType=q.txType? q.txType: "").call();
+    trxs = data.map(data => {
             return {
             id: data.id,
             from: data.from,
             to: data.to,
+            itemId: data.itemId,
             price: data.price,
-            item: data.item,
-            transactionType: data.transactionType
+            txType: data.txType,
+            date: new Date(data.date * 1000)
         }
     });
+    console.log(trxs)
     return trxs;
 }
 
-exports.getAllTransactionsForUser = async (user) =>{
-    const data = await contract.methods.getAllTransactionsForUser(user).call();
-    trxs = data.filter(t => t.from != "");
-    trxs = trxs.map(data => {
+exports.getTransactionsByDbIds = async (ids)=>{
+    const data = await contract.methods.getTransactionsByDbIds(ids).call();
+    trxs = data.map(data => {
             return {
             id: data.id,
             from: data.from,
             to: data.to,
+            itemId: data.itemId,
             price: data.price,
-            item: data.item,
-            transactionType: data.transactionType
+            txType: data.txType,
+            date: new Date(data.date * 1000)
         }
     });
+    console.log(trxs)
     return trxs;
 }
+
+exports.listenToInsertedEvents = async ()=>{
+    let options = {
+        filter: {
+            value: [],
+        },
+        fromBlock: 0
+    };
+    
+    contract.events.insertedTransaction(options)
+    .on('data', event => console.log(event))
+    .on('changed', changed => console.log(changed))
+    .on('error', err => console.log(err))
+    .on('connected', str => console.log(str))
+}
+
+
+// exports.query({from: "a", to: "", txType: -1})
+// exports.getTransactionById(2)
+// exports.getAllTransactions();
+// exports.getTransactionsByDbIds([5,6,7])
+// exports.addTransaction({dbId: 30, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
+// exports.addTransaction({dbId: 31, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
+// exports.addTransaction({dbId: 32, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
+// exports.addTransaction({dbId: 33, from: "a", to: "b", itemId: 5, price: 500, txType: 5});
+// exports.listenToInsertedEvents();
