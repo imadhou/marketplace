@@ -1,6 +1,6 @@
 HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
+marketplaceAPI/target/
+!marketplaceAPI/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+blockchainApi/bc
+blockchainApi/node_modules
+
