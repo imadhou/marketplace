@@ -1,6 +1,7 @@
 package fr.synthese.marketplace.service.core.entity.product;
 
 import fr.synthese.marketplace.service.core.entity.lineCart.LineCart;
+import fr.synthese.marketplace.service.core.entity.user.User;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,5 +26,8 @@ public class Product {
 
     @ManyToOne
     private LineCart lineCart;
+
+    @ManyToOne
+    private User user;
 
 }
