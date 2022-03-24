@@ -1,6 +1,6 @@
 # marketplace  
 
-## après avoir suivi les instructions ci-sesous lancer les deux commandes suivantes:  
+## après avoir suivi les instructions ci-dessous lancer les deux commandes suivantes:  
 - npm run deploy : pour deployer le smart contract
 - npm start : pour lancer le serveur
 
