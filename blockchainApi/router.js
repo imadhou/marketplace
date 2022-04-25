@@ -33,6 +33,7 @@ getTransactionsByquery = async (req, res, next)=>{
     res.send(data);
 }
 
+
 router.post('/transactions',addTransaction);
 router.get('/transactions',getAllTransactions);
 router.get('/transactions/:id',getTransactionById);

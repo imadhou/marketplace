@@ -10,6 +10,8 @@ require('dotenv').config();
 console.log("Reading contract source file ...")
 /** Contract source file */
 const contractPath = path.resolve(__dirname, 'Marketplace.sol');
+console.log(contractPath)
+console.log(__dirname)
 const source = fs.readFileSync(contractPath, 'utf8');
 
 /** Account address */
