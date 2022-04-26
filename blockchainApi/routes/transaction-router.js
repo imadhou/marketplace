@@ -3,6 +3,7 @@ const controller = require('../controllers/transaction-controller');
 
 const router = express.Router();
 
+router.post("/search", controller.searchTransactions);
 router.get("/initialize", controller.initTransactions);
 router.post('/', controller.addTransaction);
 router.get('/', controller.getAllTransactions);

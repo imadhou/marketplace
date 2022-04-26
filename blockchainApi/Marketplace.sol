@@ -21,6 +21,31 @@ contract Marketplace {
         string pseudo;
     }
 
+// eq, neq, eql, eqh, in, nin
+    string constant eq = "eq";
+    string constant neq = "neq";
+    string constant eql = "eql";
+    string constant eqh = "eqh";
+    string constant _in = "in";
+    string constant nin = "nin";
+
+    struct Transactions{
+        uint256[] transactions;
+        uint256 size;
+    }
+
+    struct StringQuery{
+        string field;
+        string operator;
+        string[] values;
+    }
+
+    struct IntQuery{
+        string field;
+        string operator;
+        int256[] values;
+    }
+
     mapping(string => IUser) users;
     mapping(uint256 => string) userIds;
     uint256 usersCount;
@@ -107,90 +132,188 @@ contract Marketplace {
         return (transactions[id]);
     }
 
-    function query( string memory from, string memory to, int256 txType, string memory operator) public view returns (ITransaction[] memory) {
-        uint256[] memory fromTransactions = fromUser[from];
-        uint256[] memory toTransactions = toUser[to];
-        uint256[] memory txTypes = types[txType];
 
-        ITransaction[] memory trxs = new ITransaction[](fromTransactions.length + toTransactions.length + txTypes.length);
+    function getFromTransactionsIds(StringQuery memory fromMails) private view returns(Transactions memory){
+
         uint index = 0;
+        uint256[] memory trxs;
 
-        if (compare(operator, "OR") == 0) {
-            if (compare(from, "") != 0) {
-                for (uint256 i = 0; i < fromTransactions.length; i++) {
-                    trxs[index] = transactions[fromTransactions[i]];
-                    index++;
-                }
-            }
-            if (compare(to, "") != 0) {
-                for (uint256 i = 0; i < toTransactions.length; i++) {
-                    trxs[index] = transactions[toTransactions[i]];
-                    index++;
-                }
-            }
-            if (txType != 0) {
-                for (uint256 i = 0; i < txTypes.length; i++) {
-                    trxs[index] = transactions[txTypes[i]];
-                    index++;
-                }
-            }
-        } else {
+        if(compare(fromMails.operator, eq) == 0){
+            trxs = new uint256[](fromUser[fromMails.values[0]].length);
+            for(uint i = 0; i < fromUser[fromMails.values[0]].length; i++){
+                trxs[index] = fromUser[fromMails.values[0]][index];
+                index++;
 
-            if(compare(from, "") != 0 && compare(to, "") != 0 && txType != 0){
-                for (uint256 i = 0; i < fromTransactions.length; i++) {
-                    ITransaction memory transaction = transactions[fromTransactions[i]];
-                    if(compare(to, transaction.to) == 0 && transaction.txType == txType){
-                        trxs[index] = transaction;
-                        index++;
-                    }
-                }
-            }else if(compare(from, "") != 0 && compare(to, "") != 0 && txType == 0){
-                for (uint256 i = 0; i < fromTransactions.length; i++) {
-                    ITransaction memory transaction = transactions[fromTransactions[i]];
-                    if(compare(to, transaction.to) == 0){
-                        trxs[index] = transaction;
-                        index++;
-                    }
-                }
-            }else if(compare(from, "") != 0 && compare(to, "") == 0 && txType != 0){
-                for (uint256 i = 0; i < fromTransactions.length; i++) {
-                    ITransaction memory transaction = transactions[fromTransactions[i]];
-                    if(transaction.txType == txType){
-                        trxs[index] = transaction;
-                        index++;
-                    }
-                }
-            }else if(compare(from, "") != 0 && compare(to, "") == 0 && txType == 0){
-                for (uint256 i = 0; i < fromTransactions.length; i++) {
-                    ITransaction memory transaction = transactions[fromTransactions[i]];
-                    trxs[index] = transaction;
-                    index++;
-                }
-            }else if(compare(from, "") == 0 && compare(to, "") != 0 && txType != 0){
-                for (uint256 i = 0; i < toTransactions.length; i++) {
-                    ITransaction memory transaction = transactions[toTransactions[i]];
-                    if(transaction.txType == txType){
-                        trxs[index] = transaction;
-                        index++;
-                    }
-                }
-            }else if(compare(from, "") == 0 && compare(to, "") != 0 && txType == 0){
-                for (uint256 i = 0; i < toTransactions.length; i++) {
-                    ITransaction memory transaction = transactions[toTransactions[i]];
-                    trxs[index] = transaction;
-                    index++;
-                }
-            }else if(compare(from, "") == 0 && compare(to, "") == 0 && txType != 0){
-                for (uint256 i = 0; i < txTypes.length; i++) {
-                    ITransaction memory transaction = transactions[txTypes[i]];
-                    trxs[index] = transaction;
+            }
+            
+        }else if(compare(fromMails.operator, _in) == 0){
+            uint size = 0;
+            for(uint i = 0; i < fromMails.values.length; i++){
+                size = size + fromUser[fromMails.values[i]].length;
+            }
+
+            trxs = new uint256[](size);
+            for(uint i = 0; i < fromMails.values.length; i++){
+                for(uint j = 0; j < fromUser[fromMails.values[i]].length; j++){
+                    trxs[index] = fromUser[fromMails.values[i]][j];
                     index++;
                 }
             }
         }
-        return trxs; 
+        Transactions memory ts = Transactions(trxs, index);
+        return ts; 
+    }
+    function getToTransactionsIds(StringQuery memory toMails) private view returns(Transactions memory){
+        uint index = 0;
+        uint256[] memory trxs;
+
+        if(compare(toMails.operator, eq) == 0){
+            trxs = new uint256[](toUser[toMails.values[0]].length);
+            for(uint i = 0; i < toUser[toMails.values[0]].length; i++){
+                trxs[index] = toUser[toMails.values[0]][index];
+                index++;
+
+            }
+            
+        }else if(compare(toMails.operator, _in) == 0){
+            uint size = 0;
+            for(uint i = 0; i < toMails.values.length; i++){
+                size = size + toUser[toMails.values[i]].length;
+            }
+
+            trxs = new uint256[](size);
+            for(uint i = 0; i < toMails.values.length; i++){
+                for(uint j = 0; j < toUser[toMails.values[i]].length; j++){
+                    trxs[index] = toUser[toMails.values[i]][j];
+                    index++;
+                }
+            }
+        }
+        Transactions memory ts = Transactions(trxs, index);
+        return ts;
+    }
+    function getTxTypesTransactionsIds(IntQuery memory tTypes) private view returns(Transactions memory){
+        uint index = 0;
+        uint256[] memory trxs;
+
+        if(compare(tTypes.operator, eq) == 0){
+            trxs = new uint256[](types[tTypes.values[0]].length);
+            for(uint i = 0; i < types[tTypes.values[0]].length; i++){
+                trxs[index] = types[tTypes.values[0]][index];
+                index++;
+
+            }
+            
+        }else if(compare(tTypes.operator, _in) == 0){
+            uint size = 0;
+            for(uint i = 0; i < tTypes.values.length; i++){
+                size = size + types[tTypes.values[i]].length;
+            }
+
+            trxs = new uint256[](size);
+            for(uint i = 0; i < tTypes.values.length; i++){
+                for(uint j = 0; j < types[tTypes.values[i]].length; j++){
+                    trxs[index] = types[tTypes.values[i]][j];
+                    index++;
+                }
+            }
+        }
+        Transactions memory ts = Transactions(trxs, index);
+        return ts;
     }
 
+
+    function searchTransactions(StringQuery memory from, StringQuery memory to, IntQuery memory txType, string memory operator) public view returns (ITransaction[] memory){
+
+        uint index = 0;
+        ITransaction[] memory trxs;
+
+
+        Transactions memory f;
+        Transactions memory t;
+        Transactions memory tp;
+        
+        if(compare(operator,"OR") == 0){
+            if(compare(from.field, "") != 0){
+                f = getFromTransactionsIds(from);
+            }
+
+            if(compare(to.field, "") != 0){
+                t = getToTransactionsIds(to);
+            }
+
+            if(compare(txType.field, "") != 0){
+                tp = getTxTypesTransactionsIds(txType);
+            }
+
+            uint size = t.size + f.size + tp.size;
+            trxs = new ITransaction[](size);
+
+            for(uint i = 0; i < f.size; i++){
+                trxs[index] = transactions[f.transactions[i]];
+                index++;
+            }
+            for(uint i = 0; i < t.size; i++){
+                trxs[index] = transactions[t.transactions[i]];
+                index++;
+            }
+            for(uint i = 0; i < tp.size; i++){
+                trxs[index] = transactions[tp.transactions[i]];
+                index++;
+            }
+
+
+        }else{
+
+            if(compare(from.field, "") == 0 && compare(to.field, "") == 0 && compare(txType.field, "") == 0){
+                f = getFromTransactionsIds(from);
+                t = getToTransactionsIds(to);
+                tp = getTxTypesTransactionsIds(txType);
+                
+                for(uint i = 0; i < f.size; i++){
+                    if(transactions[f.transactions[i]])
+                }
+            }else if(compare(from.field, "") == 0 && compare(to.field, "") == 0 && compare(txType.field, "") != 0){
+                f = getFromTransactionsIds(from);
+            }else if(compare(from.field, "") == 0 && compare(to.field, "") != 0 && compare(txType.field, "") == 0){
+                f = getFromTransactionsIds(from);
+            }else if(compare(from.field, "") == 0 && compare(to.field, "") != 0 && compare(txType.field, "") != 0){
+                f = getFromTransactionsIds(from);
+            }else if(compare(from.field, "") != 0 && compare(to.field, "") == 0 && compare(txType.field, "") == 0){
+                t = getToTransactionsIds(to);
+            }else if(compare(from.field, "") != 0 && compare(to.field, "") == 0 && compare(txType.field, "") != 0){
+                t = getToTransactionsIds(to);
+            }else if(compare(from.field, "") != 0 && compare(to.field, "") != 0 && compare(txType.field, "") == 0){
+                tp = getTxTypesTransactionsIds(txType);
+            }
+
+        }
+
+        return trxs;
+    }
+
+
+
+
+
+
+    function stringIsIn(string memory value, string[] memory values) private pure returns(int256){
+        for(uint i = 0; i < values.length; i++){
+            if(compare(values[i], value) == 0){
+                return 0;
+            }
+        }
+        return 1;
+    }
+
+    function intIsIn(int256 value, int256[] memory values) private pure returns(int256){
+        for(uint i = 0; i < values.length; i++){
+            if(values[i] == value){
+                return 0;
+            }
+        }
+        return 1;
+    }
 
     function compare(string memory _a, string memory _b) private pure returns (int256){
         bytes memory a = bytes(_a);
