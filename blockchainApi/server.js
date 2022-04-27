@@ -10,7 +10,7 @@ const authRouter = require('./routes/auth-router');
 const transactionRouter = require('./routes/transaction-router');
 
 const app = express();
-
+app.use(express.static('public'));
 
 app.use(express.json());
 
