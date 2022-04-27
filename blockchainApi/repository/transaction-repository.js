@@ -60,6 +60,22 @@ exports.query = async (q) => {
     return trxs;
 }
 
+exports.searchTransactions = async (query) =>{
+    const data = await contract.methods.searchTransactions(query.from, query.to, query.txType, query.operator).call();
+    trxs = data.map(data => {
+        return {
+            id: data.id,
+            from: data.from,
+            to: data.to,
+            itemId: data.itemId,
+            price: data.price,
+            txType: data.txType,
+            date: new Date(data.date * 1000)
+        }
+    });
+    return trxs;
+}
+
 exports.listenToInsertedEvents = async ()=>{
     let options = {
         filter: {
@@ -93,8 +109,7 @@ exports.initTransactions = async () =>{
         [12, "e", "a", 2, date, 26, 10],
         [13, "e", "d", 2, date, 37, 35],
         [14, "f", "b", 3, date, 22, 25],
-        [15, "f", "a", 3, date, 26, 80],
-    ]
+        [15, "f", "a", 3, date, 26, 80]]
 
     const d = await contract
     .methods

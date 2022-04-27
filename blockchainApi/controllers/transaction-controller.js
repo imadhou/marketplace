@@ -26,6 +26,11 @@ exports.getTransactionsByquery = async (req, res, next)=>{
     res.send(data);
 }
 
+exports.searchTransactions = async (req, res, next) =>{
+    const data = await bc.searchTransactions(req.body);
+    res.send(data);
+}
+
 exports.initTransactions = async(req, res, next) =>{
     const dd = 5 + 5;
     const d = await bc.initTransactions();
