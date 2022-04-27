@@ -1,19 +1,32 @@
 const express = require('express');
-var bodyParser = require('body-parser')
+const errorHandler = require('./errors/error-handler');
+const NotFoundError = require('./errors/not-found-error');
+
+require('dotenv').config();
+
+
+const userRouter = require('./routes/user-router');
+const authRouter = require('./routes/auth-router');
+const transactionRouter = require('./routes/transaction-router');
+
 const app = express();
-const bc = require('./bc')
-router = require('./router')
 
 
-app.use(bodyParser.json());
-app.use('/api',router)
-const port = 3000;
+app.use(express.json());
 
+//app.use('/api/auth',authRouter);
+app.use('/api/transactions',transactionRouter);
+app.use('/api/users',userRouter);
+
+app.all('*', (req, resp, next) => {
+    next(new NotFoundError(`can't find ${req.originalUrl} on the server`, 404));
+  });
+
+app.use(errorHandler);
+
+const port = process.env.PORT;
 app.listen(port, () => {
-    console.log("listening on port 3000");
-    bc.listenToInsertedEvents();
+    console.log(`listening on port ${port}`);
 });
-
-
 
 
