@@ -32,7 +32,6 @@ exports.searchTransactions = async (req, res, next) =>{
 }
 
 exports.initTransactions = async(req, res, next) =>{
-    const dd = 5 + 5;
     const d = await bc.initTransactions();
     res.send(d)
 }
