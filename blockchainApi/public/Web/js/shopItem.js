@@ -5,3 +5,8 @@
 */
 // This file is intentionally blank
 // Use this file to add JavaScript to your project
+
+function makeAnOffer() {
+    //document.getElementById("demo").style.color = "red";
+    console.log("faire une proposition");
+  }
