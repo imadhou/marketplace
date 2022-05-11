@@ -138,3 +138,22 @@
 09:04:36.829453 db@open done T·154.3118ms
 10:32:27.728019 db@close closing
 10:32:27.728019 db@close done T·0s
+=============== May 11, 2022 (CEST) ===============
+10:35:04.737057 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+10:35:04.737558 version@stat F·[0 1] S·716KiB[0B 716KiB] Sc·[0.00 0.01]
+10:35:04.737558 db@open opening
+10:35:04.738058 journal@recovery F·2
+10:35:04.739058 journal@recovery recovering @25
+10:35:04.747566 journal@recovery recovering @32
+10:35:04.860634 memdb@flush created L0@33 N·16102 S·851KiB "H\x00\a..\xc1a\xb0,v17879":"unc..own,v16935"
+10:35:04.860634 version@stat F·[1 1] S·1MiB[851KiB 716KiB] Sc·[0.25 0.01]
+10:35:05.050485 memdb@flush created L0@35 N·2952 S·165KiB "\x15̽..զ],v40727":"\xf2\xcd\x19..\xd73u,v40738"
+10:35:05.052329 version@stat F·[2 1] S·1MiB[1017KiB 716KiB] Sc·[0.50 0.01]
+10:35:05.085857 db@janitor F·9 G·4
+10:35:05.085857 db@janitor removing table-24
+10:35:05.085857 db@janitor removing table-28
+10:35:05.086357 db@janitor removing table-31
+10:35:05.086357 db@janitor removing manifest-33
+10:35:05.086357 db@open done T·348.7999ms
+11:03:06.622196 db@close closing
+11:03:06.622196 db@close done T·0s

@@ -8,6 +8,7 @@ const account = process.env.ACCOUNT;
 
 
 exports.addTransaction = async (trx) =>{
+  console.log(trx)
     contract
     .methods
     .addTransaction(from= trx.from, to= trx.to, itemId= trx.itemId, price= trx.price, txType= trx.txType, date= Math.round((new Date()).getTime()/1000))
@@ -83,7 +84,7 @@ exports.listenToInsertedEvents = async ()=>{
         },
         fromBlock: 0
     };
-    
+
     contract.events.insertedTransaction(options)
     .on('data', event => console.log('data',event))
     .on('changed', changed => console.log('changed',changed))
