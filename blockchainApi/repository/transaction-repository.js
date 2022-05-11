@@ -1,11 +1,21 @@
 const Web3 = require('web3');
-
+var mysql = require('mysql');
 
 const web3 = new Web3(Web3.givenProvider || process.env.WSPROVIDER);
 const contract = new web3.eth.Contract(require('./../abi.json'));
 contract.options.address = process.env.ADDRESS;
 const account = process.env.ACCOUNT;
 
+var con = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: ""
+});
+
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+});
 
 exports.addTransaction = async (trx) =>{
     contract
