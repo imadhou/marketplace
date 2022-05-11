@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>New offer</title>
+        <link href="css/admin.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    </head>
+
+    <script type="text/javascript">
+        function placeoffer() {
+            category = document.getElementById('cat-select');
+            title = document.getElementById('inputOfferTitle');
+            price = document.getElementById('inputOfferPrice');
+            desc  = document.getElementById('desc');
+            type = document.getElementById('hiddentype')
+            iditem = document.getElementById('hiddenitemid')
+            name = document.getElementById('inputName')
+
+            const obj = {from: name, to: "", itemId: iditem, price: price, txType: type};
+            myJSON = JSON.stringify(obj)
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:3000/api/transactions/", true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(myJSON);
+        }
+    </script>
+
+
+
+
+    <body class="bg-primary">
+        <div id="layoutAuthentication">
+            <div id="layoutAuthentication_content">
+                <main>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-7">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Create new offer</h3></div>
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 mb-md-0">
+                                                        <input class="form-control" id="inputOfferTitle" type="text" placeholder="Enter the offer title" />
+                                                        <label for="inputOfferTitle">Offer title</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating mb-3 mb-md-0">
+                                                            <input class="form-control" id="inputOfferPrice" type="number" placeholder="Enter the offer title" style="margin : 10px"/>
+                                                            <label for="inputOfferPrice">Price</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <div class="form-floating mb-3 mb-md-0">
+                                                                <input class="form-control" id="inputname" type="text" placeholder="Enter your name" style="margin : 10px"/>
+                                                                <label for="inputName">Name</label>
+                                                            </div>
+                                                        </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                      <select name="Category" id="cat-select">
+                                                          <option value="">--Please choose a category--</option>
+                                                          <option value="Toy">Toy</option>
+                                                          <option value="Computer">Computer</option>
+                                                          <option value="TV">TV</option>
+                                                          <option value="car">Car</option>
+                                                      </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <textarea id="desc" name="Description" rows="8" cols="94"></textarea>
+                                            </div>
+                                            <input id="hiddentype" type="hidden" value="1"/>
+                                            <input id="hiddenitemid" type="hidden" value="999"/>
+                                            <div class="mt-4 mb-0">
+                                                <div class="d-grid"><a class="btn btn-primary btn-block" OnClick="placeoffer()" >Place offer</a></div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+            <div id="layoutAuthentication_footer">
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/admin.js"></script>
+    </body>
+</html>
