@@ -33,4 +33,5 @@ build/
 .vscode/
 
 blockchainApi/node_modules
+blockchainApi/bcData
 
