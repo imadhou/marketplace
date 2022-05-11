@@ -14,7 +14,6 @@ $(document).ready(function () {
 });
 
 function getTransaction(id) {
-  console.log("hello ?");
   $.get(
       "http://localhost:3000/api/transactions/"+id,
       //{paramOne : 1, paramX : 'abc'},
@@ -24,12 +23,13 @@ function getTransaction(id) {
           productDescription = document.getElementById("productDescription");
           productSeller = document.getElementById("productSeller");
           productPrice = document.getElementById("productPrice");
-          // productImage = document.getElementById("productImage");
-          productName.innerHTML = data.id;
+          productImage = document.getElementById("productImage");
+          productName.innerHTML = data.product_name;
           productSeller.innerHTML = data.from;
           productPrice.innerHTML = data.price + " € ";
-          productDescription.innerHTML = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at dolorem quidem modi. Nam sequi consequatur obcaecati excepturi alias magni, accusamus eius blanditiis delectus ipsam minima ea iste laborum vero?";
-      }
+          productDescription.innerHTML = data.product_description;
+          productImage.src = data.product_img;
+        }
   );
 }
 

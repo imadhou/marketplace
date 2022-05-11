@@ -15,11 +15,10 @@ $(document).ready(function () {
 function setAllTransactions() {
     console.log("hello ?");
     $.get(
-        "http://localhost:3000/api/transactions",
+        "http://localhost:3000/api/transactions/Last",
         //{paramOne : 1, paramX : 'abc'},
         function(data) {
           for (var i = 0; i < data.length; i++) {
-            console.log(data[i]);
             addRetrievedItem(data[i]);
             //Do something
         }
@@ -46,7 +45,8 @@ function addRetrievedItem(transaction) {
   let div1 = document.createElement('div');
   div1.className = "card h-100";
   let img = document.createElement('img');
-  img.src = "https://dummyimage.com/450x300/dee2e6/6c757d.jpg";
+  // img.src = "https://dummyimage.com/450x300/dee2e6/6c757d.jpg";
+  img.src = transaction.product_img;
   img.className = "card-img-top";
 
   let div1_1 = document.createElement('div');
@@ -58,7 +58,7 @@ function addRetrievedItem(transaction) {
   price.innerHTML = transaction.price + " € ";
   let h5 = document.createElement('h5');
   // h5.textContent = "Item text";
-  h5.textContent = transaction.itemId;
+  h5.textContent = transaction.product_name;
   h5.className = "fw-bolder";
 
   div1_1_1.appendChild(h5);
@@ -71,7 +71,7 @@ function addRetrievedItem(transaction) {
   div1_2_1.className = "text-center";
   let buy = document.createElement("a");
   buy.className = "btn btn-outline-dark mt-auto";
-  buy.href = "shopItem.html";
+  buy.href = "shopItem.html?id="+transaction.id;
   buy.innerHTML = "Buy";
 
   div1_2_1.appendChild(buy);

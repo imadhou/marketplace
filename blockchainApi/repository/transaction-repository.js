@@ -8,6 +8,8 @@ const account = process.env.ACCOUNT;
 
 var con = mysql.createConnection({
   host: "localhost",
+  port: 3306,
+  database: "blockchain",
   user: "root",
   password: ""
 });
@@ -40,16 +42,88 @@ exports.getAllTransactions = async () =>{
     return trxs;
 }
 
+exports.getLastTransactions = async () =>{
+    
+    let transactions = [];
+    let transactions_id = [];
+    let sql = `SELECT * FROM (
+        SELECT * FROM product ORDER BY id ASC LIMIT 2
+    ) sub
+    ORDER BY id ASC`;
+    con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        for ( var i = 0; i < result.length; i++ ) {
+            let tr = {};
+        tr.id = result[i].id;
+        tr.product_id = result[i].product_id;
+        tr.product_name = result[i].product_name;
+        tr.product_category = result[i].product_category;
+        tr.product_description = result[i].product_description;
+        tr.product_specification = result[i].product_specification;
+        tr.product_img = result[i].product_img;
+        tr.product_price = result[i].product_price;
+        transactions.push(tr);
+        transactions_id.push(tr.id);
+        }
+    // console.log(transactions);
+      });
+    data = await contract.methods.getAllTransactions().call();
+    const trxs = [];
+    data.map(data => {
+        // console.log(transactions_id.includes(parseInt(data.id)) );
+        if ( transactions_id.includes(parseInt(data.id)) ) {
+            console.log(data.id);
+            let tr = transactions[transactions_id.indexOf(parseInt(data.id))];
+            trxs.push ({
+            id: data.id,
+            product_id: tr.product_id,
+            product_name: tr.product_name,
+            product_category: tr.product_category,
+            product_description: tr.product_description,
+            product_specification: tr.product_specification,
+            product_img: tr.product_img,
+            from: data.from,
+            to: data.to,
+            itemId: data.itemId,
+            price: data.price,
+            txType: data.txType,
+            date: new Date(data.date * 1000)
+        }) }
+    });
+    return trxs;
+}
+
 exports.getTransactionById = async (id) =>{
+
+    let sql = `SELECT * FROM product WHERE id = ${id}`;
+    let tr = {};
+    con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        tr.id = result[0].id;
+        tr.product_id = result[0].product_id;
+        tr.product_name = result[0].product_name;
+        tr.product_category = result[0].product_category;
+        tr.product_description = result[0].product_description;
+        tr.product_specification = result[0].product_specification;
+        tr.product_img = result[0].product_img;
+        tr.product_price = result[0].product_price;
+    });
+
     const data = await contract.methods.getTransactionById(id).call();
     const trx =  {
-        id: data.id,
-        from: data.from,
-        to: data.to,
-        itemId: data.itemId,
-        price: data.price,
-        txType: data.txType,
-        date: new Date(data.date * 1000)
+            id: data.id,
+            product_id: tr.product_id,
+            product_name: tr.product_name,
+            product_category: tr.product_category,
+            product_description: tr.product_description,
+            product_specification: tr.product_specification,
+            product_img: tr.product_img,
+            from: data.from,
+            to: data.to,
+            itemId: data.itemId,
+            price: data.price,
+            txType: data.txType,
+            date: new Date(data.date * 1000)
     };
     return trx;
 }

@@ -21,6 +21,11 @@ exports.getAllTransactions = async (req, res, next)=>{
     res.send(data);
 }
 
+exports.getLastTransactions = async (req, res, next)=>{
+    const data = await bc.getLastTransactions();
+    res.send(data);
+}
+
 exports.getTransactionsByquery = async (req, res, next)=>{
     const data = await bc.query(req.body);
     res.send(data);
