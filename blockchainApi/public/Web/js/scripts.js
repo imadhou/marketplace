@@ -55,7 +55,7 @@ function addRetrievedItem(transaction) {
   div1_1_1.className = "text-center";
   let price = document.createElement('p');
   // price.innerHTML = "25.99$";
-  price.innerHTML = transaction.price;
+  price.innerHTML = transaction.price + " € ";
   let h5 = document.createElement('h5');
   // h5.textContent = "Item text";
   h5.textContent = transaction.itemId;
