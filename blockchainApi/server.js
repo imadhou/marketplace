@@ -1,4 +1,5 @@
 const express = require('express');
+var cors = require('cors');
 const errorHandler = require('./errors/error-handler');
 const NotFoundError = require('./errors/not-found-error');
 
@@ -10,6 +11,7 @@ const authRouter = require('./routes/auth-router');
 const transactionRouter = require('./routes/transaction-router');
 
 const app = express();
+app.use(cors());
 app.use(express.static('public'));
 
 app.use(express.json());
