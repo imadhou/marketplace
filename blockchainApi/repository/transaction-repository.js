@@ -8,7 +8,6 @@ const account = process.env.ACCOUNT;
 
 
 exports.addTransaction = async (trx) =>{
-  console.log(trx)
     contract
     .methods
     .addTransaction(from= trx.from, to= trx.to, itemId= trx.itemId, price= trx.price, txType= trx.txType, date= Math.round((new Date()).getTime()/1000))
@@ -84,7 +83,7 @@ exports.listenToInsertedEvents = async ()=>{
         },
         fromBlock: 0
     };
-
+    
     contract.events.insertedTransaction(options)
     .on('data', event => console.log('data',event))
     .on('changed', changed => console.log('changed',changed))
@@ -92,9 +91,9 @@ exports.listenToInsertedEvents = async ()=>{
     .on('connected', str => console.log('connected',str))
 }
 
-exports.initTransactions = async () =>{
+exports.initTransactions = async (transactions) =>{
     const date = Math.round((new Date()).getTime()/1000);
-    const transactions = [
+    /*const transactions = [
         [0, "a", "b", 1, date, 0, 200],
         [1, "a", "b", 3, date, 1, 300],
         [2, "a", "c", 3, date, 2, 500],
@@ -110,13 +109,12 @@ exports.initTransactions = async () =>{
         [12, "e", "a", 2, date, 26, 10],
         [13, "e", "d", 2, date, 37, 35],
         [14, "f", "b", 3, date, 22, 25],
-        [15, "f", "a", 3, date, 26, 80]]
+        [15, "f", "a", 3, date, 26, 80]]*/
 
     const d = await contract
     .methods
     .initTransactions(transactions)
     .send({ from: account });
-    console.log(d);
     return d;
 }
 
