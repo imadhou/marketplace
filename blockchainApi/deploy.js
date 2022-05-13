@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const solc = require('solc');
 const Web3 = require('web3');
+const init = require('./initDataBases/init');
 require('dotenv').config();
 
 
@@ -52,34 +53,30 @@ fs.writeFileSync('./abi.json', JSON.stringify(abi));
 
 
 /** Deploy the contract */
-(async function () {
-    console.log("Deploying the source file ...")
-    const contract = new web3.eth.Contract(abi);
-    contract.deploy({
-      data: bytecode
-    }).send({
-      from: account,
-    }).then((deployment) => {
-      console.log('Contract was successfully deployed at the following address:');
-      console.log(deployment.options.address);
-      setEnvValue('ADDRESS', deployment.options.address)
-      process.exit();
-    }).catch((err) => {
-      console.error(err);
-      process.exit();
-    });
-  })();
-
-  
 
 
+async function deploy() {
+  console.log("Deploying the source file ...")
+  const contract = new web3.eth.Contract(abi);
+  return contract.deploy({
+    data: bytecode
+  }).send({
+    from: account,
+  })
+}
+
+async function runDeploy(){
+  const deployment = await deploy();
+  setEnvValue('ADDRESS', deployment.options.address)
+
+  console.log('Contract was successfully deployed at the following address:');
+  console.log(deployment.options.address);
+
+  process.exit();
+}
 
 
-
-
-
-
-
+runDeploy();
 
 
 const envFilePath = path.resolve(__dirname, ".env");
@@ -103,4 +100,5 @@ const setEnvValue = (key, value) => {
   }
   // write everything back to the file system
   fs.writeFileSync(envFilePath, envVars.join(os.EOL));
+  console.log("written")
 };

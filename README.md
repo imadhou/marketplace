@@ -1,5 +1,7 @@
 # marketplace  
 
+reinit : geth --datadir bcData init bcData/706.json
+
 ## après avoir suivi les instructions ci-dessous lancer les deux commandes suivantes:  
 - npm run deploy : pour deployer le smart contract
 - npm start : pour lancer le serveur

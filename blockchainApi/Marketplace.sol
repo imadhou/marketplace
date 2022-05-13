@@ -117,6 +117,7 @@ contract Marketplace {
         if(txType != 0){
             types[trx.txType].push(_id);
         }
+        emit insertedTransaction(_id);
         return (_id);
     }
 
