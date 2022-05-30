@@ -1,6 +1,10 @@
 # marketplace  
 
-reinit : geth --datadir bcData init bcData/706.json
+pour rereinitialiser : supprimer le dossier geth dans bcData puis
+ geth --datadir bcData init bcData/706.json -> changer juste les paths vers bcData
+
+
+./geth --datadir C:\Users\toyoy\Documents\GitHub\marketplace\blockchainApi\bcData init C:\Users\toyoy\Documents\GitHub\marketplace\blockchainApi\bcData\706.json
 
 ## après avoir suivi les instructions ci-dessous lancer les deux commandes suivantes:  
 - npm run deploy : pour deployer le smart contract
@@ -9,7 +13,7 @@ reinit : geth --datadir bcData init bcData/706.json
 ## 1-1 installer geth:
 En linux 'sudo apt-install ethereum'  
 En windows 'voir le site de etheruem'  
-### 1-2 
+### 1-2
 
 création d'un répertoire pour les données:   
 'mkdir bcData'  
@@ -21,7 +25,7 @@ exécuter la commande puppeth:
 puppeth -> marketplace -> 2 -> 1 -> 1 -> "CLE DU COMPTE GENERE" -> entrer -> 706 -> 2 -> 2 -> entrer -> CTR+C ou CTR+D  
 dans un fichier que vous nommez password.sec spécifiez le mot de passe que vous avez donné lors de la création du compte  
 CTR+C / CTR+V de startnode.sh dans le répertoire que vous vensez de créer   
-./startnode.sh pour lancer geth 
+./startnode.sh pour lancer geth
 vous pouvez aussi copier le contenu de startnode.sh et le coller dans le terminale pour lancer geth  
 
 
@@ -43,8 +47,8 @@ executer les commandes suivantes
 vouls allez le trouver dans /bcData/keystore  
 4- remplacer l'adresse du contrat par l'adresse que vous avez copier lors du déploiment
 3- 'node server.js'   
-  
-  une transaction est définie comme suit: 
+
+  une transaction est définie comme suit:
   Transaction{
       id: number,
       from: string,
@@ -56,7 +60,7 @@ vouls allez le trouver dans /bcData/keystore
 
   pour acceder à l'api : 127.0.0.1:3000  
 
- 
+
 - post('api/transactions' => addTransaction({dbId: 30, from: "a", to: "b", itemId: 5, price: 500, txType: 5}))
 - get('api/transactions' => getAllTransactions());
 - get('api/transactions/:id' => getTransactionById(5));
