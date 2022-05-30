@@ -47,7 +47,7 @@ exports.getLastTransactions = async () =>{
     let transactions = [];
     let transactions_id = [];
     let sql = `SELECT * FROM (
-        SELECT * FROM product ORDER BY id ASC LIMIT 2
+        SELECT * FROM product ORDER BY id DESC LIMIT 20
     ) sub
     ORDER BY id ASC`;
     con.query(sql, function (err, result, fields) {
@@ -72,7 +72,7 @@ exports.getLastTransactions = async () =>{
     data.map(data => {
         // console.log(transactions_id.includes(parseInt(data.id)) );
         if ( transactions_id.includes(parseInt(data.id)) ) {
-            console.log(data.id);
+            //console.log(data.id);
             let tr = transactions[transactions_id.indexOf(parseInt(data.id))];
             trxs.push ({
             id: data.id,
