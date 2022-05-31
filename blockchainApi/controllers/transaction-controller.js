@@ -40,3 +40,7 @@ exports.initTransactions = async(req, res, next) =>{
     const d = await bc.initTransactions();
     res.send(d)
 }
+exports.getTransactionsByItemIds = async(req, res, next) =>{
+    const d = await bc.getTransactionsByItemIds(req.body);
+    res.send(d)
+}
