@@ -91,6 +91,13 @@ function makeAnOffer() {
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(myJSON);
       window.location.href="index.html"
+      }
     }
   }
-  }
+
+
+
+
+
+
+}
