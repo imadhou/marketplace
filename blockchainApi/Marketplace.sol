@@ -133,7 +133,7 @@ contract Marketplace {
     function getTransactionsByItemIds(uint256[] memory ids) public view returns (ITransaction[] memory trxs){
         trxs = new ITransaction[](ids.length);
         for(uint i = 0; i < ids.length; i++){
-            ITransaction memory trx = transactions[ids[i]];
+            ITransaction memory trx = dbIds[ids[i]];
             trxs[i] = trx;
         }
         return trxs;
@@ -156,7 +156,7 @@ contract Marketplace {
                 index++;
 
             }
-            
+
         }else if(compare(fromMails.operator, _in) == 0){
             uint size = 0;
             for(uint i = 0; i < fromMails.values.length; i++){
@@ -172,7 +172,7 @@ contract Marketplace {
             }
         }
         Transactions memory ts = Transactions(trxs, index);
-        return ts; 
+        return ts;
     }
     function getToTransactionsIds(StringQuery memory toMails) private view returns(Transactions memory){
         uint index = 0;
@@ -185,7 +185,7 @@ contract Marketplace {
                 index++;
 
             }
-            
+
         }else if(compare(toMails.operator, _in) == 0){
             uint size = 0;
             for(uint i = 0; i < toMails.values.length; i++){
@@ -214,7 +214,7 @@ contract Marketplace {
                 index++;
 
             }
-            
+
         }else if(compare(tTypes.operator, _in) == 0){
             uint size = 0;
             for(uint i = 0; i < tTypes.values.length; i++){
@@ -243,9 +243,9 @@ contract Marketplace {
         Transactions memory f = getFromTransactionsIds(from);
         Transactions memory t = getToTransactionsIds(to);
         Transactions memory tp = getTxTypesTransactionsIds(txType);
-        
+
         if(compare(operator,"OR") == 0){
-        
+
             uint size = t.size + f.size + tp.size;
             trxs = new ITransaction[](size);
 
@@ -266,7 +266,7 @@ contract Marketplace {
         }else{
 
             if(compare(from.field, "") != 0 && compare(to.field, "") != 0 && compare(txType.field, "") != 0){
-   
+
                 trxs = new ITransaction[](f.size);
 
                 for(uint i = 0; i < f.size; i++){
@@ -278,7 +278,7 @@ contract Marketplace {
                     }
                 }
             }else if(compare(from.field, "") != 0 && compare(to.field, "") != 0 && compare(txType.field, "") == 0){
-  
+
                 trxs = new ITransaction[](f.size);
 
                 for(uint i = 0; i < f.size; i++){
@@ -288,7 +288,7 @@ contract Marketplace {
                     }
                 }
             }else if(compare(from.field, "") != 0 && compare(to.field, "") == 0 && compare(txType.field, "") != 0){
-     
+
                 trxs = new ITransaction[](f.size);
 
                 for(uint i = 0; i < f.size; i++){
@@ -299,7 +299,7 @@ contract Marketplace {
                 }
 
             }else if(compare(from.field, "") != 0 && compare(to.field, "") == 0 && compare(txType.field, "") == 0){
- 
+
                 trxs = new ITransaction[](f.size);
                 for(uint i = 0; i < f.size; i++){
                     trxs[index] = transactions[f.transactions[i]];
