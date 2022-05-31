@@ -10,5 +10,6 @@ router.get('/', controller.getAllTransactions);
 router.get('/Last', controller.getLastTransactions);
 router.get('/:id', controller.getTransactionById);
 router.post('/query', controller.getTransactionsByquery);
+router.post('/ids', controller.getTransactionsByItemIds);
 
 module.exports = router;

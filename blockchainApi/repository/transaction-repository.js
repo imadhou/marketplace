@@ -175,6 +175,22 @@ exports.listenToInsertedEvents = async ()=>{
     .on('connected', str => console.log('connected',str))
 }
 
+exports.getTransactionsByItemIds = async (query)=>{
+    const data = await contract.methods.getTransactionsByItemIds(query.ids).call();
+    trxs = data.map(data => {
+        return {
+            id: data.id,
+            from: data.from,
+            to: data.to,
+            itemId: data.itemId,
+            price: data.price,
+            txType: data.txType,
+            date: new Date(data.date * 1000)
+        }
+    });
+    return trxs;
+}
+
 exports.initTransactions = async (transactions) =>{
     const date = Math.round((new Date()).getTime()/1000);
     /*const transactions = [
