@@ -54,7 +54,7 @@ contract Marketplace {
     mapping(string => uint256[]) fromUser;
     mapping(string => uint256[]) toUser;
     mapping(uint256 => uint256[]) types;
-    mapping(uint256 => uint256) dbIds;
+    mapping(uint256 => uint256[]) dbIds;
     uint256 count;
 
     event insertedTransaction(uint256 indexed id);
@@ -117,7 +117,7 @@ contract Marketplace {
         if(txType != 0){
             types[trx.txType].push(_id);
         }
-        dbIds[trx.itemId] = itemId;
+        dbIds[trx.itemId].push(_id);
         emit insertedTransaction(_id);
         return (_id);
     }
@@ -131,10 +131,19 @@ contract Marketplace {
     }
 
     function getTransactionsByItemIds(uint256[] memory ids) public view returns (ITransaction[] memory trxs){
-        trxs = new ITransaction[](ids.length);
+        uint s = 0;
         for(uint i = 0; i < ids.length; i++){
-            ITransaction memory trx = dbIds[ids[i]];
-            trxs[i] = trx;
+            s = s + dbIds[ids[i]].length;
+        }
+        trxs = new ITransaction[](s);
+        s = 0;
+        for(uint i = 0; i < ids.length; i++){
+
+            for(uint j = 0; j < dbIds[ids[i]].length; j++){
+                ITransaction memory trx = transactions[dbIds[ids[i]][j]];
+                trxs[s] = trx;
+                s++;
+            }
         }
         return trxs;
     }
