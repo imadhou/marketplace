@@ -117,6 +117,7 @@ contract Marketplace {
         if(txType != 0){
             types[trx.txType].push(_id);
         }
+        dbIds[trx.itemId] = itemId;
         emit insertedTransaction(_id);
         return (_id);
     }
@@ -127,6 +128,15 @@ contract Marketplace {
             ITransaction memory trx = transactions[i];
             trxs[i] = trx;
         }
+    }
+
+    function getTransactionsByItemIds(uint256[] memory ids) public view returns (ITransaction[] memory trxs){
+        trxs = new ITransaction[](ids.length);
+        for(uint i = 0; i < ids.length; i++){
+            ITransaction memory trx = dbIds[ids[i]];
+            trxs[i] = trx;
+        }
+        return trxs;
     }
 
     function getTransactionById(uint256 id) public view returns (ITransaction memory){
