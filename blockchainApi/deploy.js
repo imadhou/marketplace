@@ -42,7 +42,7 @@ const tempFile = JSON.parse(solc.compile(JSON.stringify(input)));
 const web3 = new Web3(Web3.givenProvider || process.env.WSPROVIDER);
 
 /** Get the contract file */
-const contractFile = tempFile.contracts['Marketplace.sol']['Marketplace'];7
+const contractFile = tempFile.contracts['Marketplace.sol']['Marketplace'];
 
 /** Get the byte code to deploy in the blockchain */
 const bytecode = contractFile.evm.bytecode.object;
