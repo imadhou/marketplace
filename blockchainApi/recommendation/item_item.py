@@ -3,8 +3,8 @@ import numpy as np
 import time
 from flask import Flask, request
 from flask_restful import Resource, Api
-name_list = np.load('names.npy').tolist()
-item_item_matrix = np.load('matrix.npy')
+name_list = np.load('recommendation/names.npy').tolist()
+item_item_matrix = np.load('recommendation/matrix.npy')
 app = Flask(__name__)
 api = Api(app)
 
@@ -21,7 +21,6 @@ def get_recommendations(name, cosine_sim, name_list):
     sim_scores = sim_scores[1:101]
     # Get the movie indices
     product_indices = [i[0] for i in sim_scores]
-    print(product_indices)
     # Return the top 100 most similar movies
     for i in range(100):
         result.append(product_indices[i])
