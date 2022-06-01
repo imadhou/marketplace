@@ -5,8 +5,9 @@ const bc = require('../repository/transaction-repository');
 // response is an empty object for instance because data inserted asyncronously
 exports.addTransaction = async (req, res, next)=>{
     const trx = req.body;
-    bc.addTransaction(trx);
+    const d = await bc.addTransaction(trx);
     res.send({
+        d
     });
 }
 

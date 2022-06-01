@@ -8,50 +8,54 @@ item_item_matrix = np.load('matrix.npy')
 app = Flask(__name__)
 api = Api(app)
 
-class RecommandationIndex(Resource):
 
-    def get_recommendations(self, name, cosine_sim, name_list):
-        result = []
-        # Get the index of the movie that matches the title
-        idx = name_list.index(name)
-        # Get the pairwsie similarity scores
-        sim_scores = list(enumerate(cosine_sim[idx]))
-        # Sort the movies based on the similarity scores
-        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-        # Get the scores for 100 most similar movies
-        sim_scores = sim_scores[1:101]
-        # Get the movie indices
-        product_indices = [i[0] for i in sim_scores]
-        print(product_indices)
-        # Return the top 100 most similar movies
-        for i in range(100):
-            result.append(product_indices[i])
-        return result
+def get_recommendations(name, cosine_sim, name_list):
+    result = []
+    # Get the index of the movie that matches the title
+    idx = name_list.index(name)
+    # Get the pairwsie similarity scores
+    sim_scores = list(enumerate(cosine_sim[idx]))
+    # Sort the movies based on the similarity scores
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    # Get the scores for 100 most similar movies
+    sim_scores = sim_scores[1:101]
+    # Get the movie indices
+    product_indices = [i[0] for i in sim_scores]
+    print(product_indices)
+    # Return the top 100 most similar movies
+    for i in range(100):
+        result.append(product_indices[i])
+    return result
 
-    # Get the recommendation for an history 
-    def get_recommendations_history(self, history, cosine_sim, name_list, timestamp = False):
-        votes = dict()
-        keys_list = list(history)
-        if history != {} :
-            for product in history:
-                if product in name_list:
-                    rec = self.get_recommendations(product, cosine_sim, name_list)
-                    if product == keys_list[0]:
-                        first_product = product
-                        first_rec = rec 
-                    for movie_rec in rec:
-                        if movie_rec in votes:
-                            votes[movie_rec] += (1-rec.index(movie_rec)/100)
-                        else:
-                            votes[movie_rec] = (1-rec.index(movie_rec)/100)
-        else : first_product, first_rec = ''
+# Get the recommendation for an history 
+def get_recommendations_history(history, cosine_sim, name_list, timestamp = False):
+    votes = dict()
+    keys_list = list(history)
+    if history != {} :
         for product in history:
-            if product in votes:
-                votes.pop(product)
-        return sorted(votes, key = votes.get, reverse = True), votes
+            if product in name_list:
+                rec = get_recommendations(product, cosine_sim, name_list)
+                if product == keys_list[0]:
+                    first_product = product
+                    first_rec = rec 
+                for movie_rec in rec:
+                    if movie_rec in votes:
+                        votes[movie_rec] += (1-rec.index(movie_rec)/100)
+                    else:
+                        votes[movie_rec] = (1-rec.index(movie_rec)/100)
+    else : first_product, first_rec = ''
+    for product in history:
+        if product in votes:
+            votes.pop(product)
+    return sorted(votes, key = votes.get, reverse = True), votes
 
+class RecommandationIndex(Resource):
     def post(self):
-        return self.get_recommendations(request.json['item'], item_item_matrix, name_list)
+        return get_recommendations(request.json['item'], item_item_matrix, name_list)
+
+class RecommandationHistory(Resource):
+    def post(self):
+        return get_recommendations_history(request.json['items'], item_item_matrix, name_list)
 
     # ---------------------- SQL Queries to Database ---------------------- #
 
@@ -173,6 +177,7 @@ class RecommandationIndex(Resource):
     #recommendation = get_recommendations('Terra by Battat – 4 Dinosaur Toys, Medium – Dinosaurs for Kids & Collectors, Scientifically Accurate & Designed by A Paleo-Artist; Age 3+ (4 Pc)', item_item_matrix, name_list)
     # rec, votes = get_recommendations_history(['Terra by Battat – 4 Dinosaur Toys, Medium – Dinosaurs for Kids & Collectors, Scientifically Accurate & Designed by A Paleo-Artist; Age 3+ (4 Pc)', 'Creative Co-op Green & Grey Plush Dinosaur Rattles (Set of 3 Styles) Toys, Green'], item_item_matrix, name_list)
 api.add_resource(RecommandationIndex, '/index')
+api.add_resource(RecommandationHistory, '/history')
 
 if __name__ == '__main__':
     app.run(debug=True)
