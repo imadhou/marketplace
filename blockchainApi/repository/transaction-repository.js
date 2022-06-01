@@ -22,16 +22,17 @@ con.connect(function(err) {
   console.log("Connected!");
 });
 
+const query = util.promisify(con.query).bind(con);
+
 exports.addTransaction = async (trx) =>{
     const d = await contract
     .methods
     .addTransaction(from= trx.from, to= trx.to, itemId= trx.itemId, price= trx.price, txType= trx.txType, date= Math.round((new Date()).getTime()/1000))
     .send({ from: account });
-    console.log(d);
 }
 
-exports.getAllTransactions = async () =>{
-    data = await contract.methods.getAllTransactions().call();
+exports.getAllTransactions = async (q) =>{
+    data = await contract.methods.getAllTransactions();
     const trxs = data.map(data => {
         return {
         id: data.id,
@@ -46,18 +47,22 @@ exports.getAllTransactions = async () =>{
     return trxs;
 }
 
-exports.getLastTransactions = async () =>{
-    
+exports.getLastTransactions = async (q) =>{
     let transactions = [];
     let transactions_id = [];
     let sql = `SELECT * FROM (
         SELECT * FROM product ORDER BY id DESC LIMIT 20
     ) sub
     ORDER BY id ASC`;
-    con.query(sql, function (err, result, fields) {
-        if (err) throw err;
-        for ( var i = 0; i < result.length; i++ ) {
-            let tr = {};
+
+    if(q){
+        sql = `SELECT * FROM product WHERE id IN (${q.join(',')})`;
+    }
+
+    const result = await query(sql);
+    const trxs = [];
+    for ( var i = 0; i < result.length; i++ ) {
+        let tr = {};
         tr.id = result[i].id;
         tr.product_id = result[i].product_id;
         tr.product_name = result[i].product_name;
@@ -68,31 +73,27 @@ exports.getLastTransactions = async () =>{
         tr.product_price = result[i].product_price;
         transactions.push(tr);
         transactions_id.push(tr.id);
-        }
-    // console.log(transactions);
-      });
-    data = await contract.methods.getAllTransactions().call();
-    const trxs = [];
-    data.map(data => {
-        // console.log(transactions_id.includes(parseInt(data.id)) );
-        if ( transactions_id.includes(parseInt(data.id)) ) {
-            //console.log(data.id);
-            let tr = transactions[transactions_id.indexOf(parseInt(data.id))];
-            trxs.push ({
-            id: data.id,
+    }
+
+    data = await exports.getTransactionsByItemIds({ids: transactions_id});
+    data = data.filter(d => d.txType == 1);
+    data.map(d => {
+        let tr = transactions[transactions_id.indexOf(parseInt(d.itemId))];
+        trxs.push ({
+            id: d.id,
             product_id: tr.product_id,
             product_name: tr.product_name,
             product_category: tr.product_category,
             product_description: tr.product_description,
             product_specification: tr.product_specification,
             product_img: tr.product_img,
-            from: data.from,
-            to: data.to,
-            itemId: data.itemId,
-            price: data.price,
-            txType: data.txType,
-            date: new Date(data.date * 1000)
-        }) }
+            from: d.from,
+            to: d.to,
+            itemId: d.itemId,
+            price: d.price,
+            txType: d.txType,
+            date: new Date(d.date * 1000)
+        })
     });
     return trxs;
 }
@@ -100,20 +101,21 @@ exports.getLastTransactions = async () =>{
 exports.getTransactionById = async (id) =>{
 
     let sql = `SELECT * FROM product WHERE id = ${id}`;
-    let tr = {};
-    con.query(sql, function (err, result, fields) {
-        if (err) throw err;
-        tr.id = result[0].id;
-        tr.product_id = result[0].product_id;
-        tr.product_name = result[0].product_name;
-        tr.product_category = result[0].product_category;
-        tr.product_description = result[0].product_description;
-        tr.product_specification = result[0].product_specification;
-        tr.product_img = result[0].product_img;
-        tr.product_price = result[0].product_price;
-    });
+    let t = await query(sql);
+    t = t[0]
+    const tr = {};
+    tr.id = t.id;
+    tr.product_id = t.product_id;
+    tr.product_name = t.product_name;
+    tr.product_category = t.product_category;
+    tr.product_description = t.product_description;
+    tr.product_specification = t.product_specification;
+    tr.product_img = t.product_img;
+    tr.product_price = t.product_price;
 
-    const data = await contract.methods.getTransactionById(id).call();
+
+    let data = await exports.getTransactionsByItemIds({ids: [id]});
+    data = data[0];
     const trx =  {
             id: data.id,
             product_id: tr.product_id,
@@ -186,7 +188,6 @@ exports.getTransactionsByItemIds = async (query)=>{
 
 exports.initTransactions = async () =>{
     const usersData = await users.getUsersToInit();
-    const query = util.promisify(con.query).bind(con);
     const sqlQuery = "SELECT id, product_price FROM product";
     const data = await query(sqlQuery);
     const trxs = [];
@@ -305,7 +306,12 @@ exports.initTransactions = async () =>{
         .methods
         .initTransactions(ts)
         .send({ from: account});
-        console.log(d);
     }
+}
 
+exports.getProductNames = async (ids)=>{
+    const sql = `SELECT product_name FROM product WHERE id IN (${ids.join(',')})`;
+    const data = await query(sql);
+    items = data.map(d => d.product_name)
+    return(items);
 }

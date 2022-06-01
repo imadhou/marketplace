@@ -1,6 +1,7 @@
 {
     "dependencies": {
         "ansi-colors": "^4.1.1",
+        "axios": "^0.27.2",
         "body-parser": "^1.19.2",
         "cli-progress": "^3.11.0",
         "cors": "^2.8.5",
@@ -10,12 +11,15 @@
         "fast-csv": "^4.3.6",
         "jsonwebtoken": "^8.5.1",
         "mysql": "^2.18.1",
+        "npm-run-all": "^4.1.5",
         "solc": "^0.5.2",
         "web3": "^1.7.1"
     },
     "scripts": {
         "deploy": "node deploy.js",
         "init": "node init.js",
-        "start": "node server.js"
+        "runServer": "node server.js",
+        "runRecc": "python3 recommendation/item_item.py",
+        "start": "npm-run-all -p -r runRecc runServer"
     }
 }

@@ -51,17 +51,6 @@ exports.getAllUsers = async () =>{
 }
 
 
-/*const users = [
-    [0, "a", "a", "a"],
-    [1, "b", "b", "a"],
-    [2, "c", "c", "c"],
-    [3, "d", "d", "d"],
-    [4, "e", "e", "e"],
-    [5, "f", "f", "f"],
-    [6, "g", "g", "g"],
-    [8, "h", "h", "h"],
-];*/
-
 exports.initUsers = async (users) =>{
     const d = await contract
     .methods

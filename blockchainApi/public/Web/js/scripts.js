@@ -15,7 +15,7 @@ $(document).ready(function () {
 function setAllTransactions() {
     console.log("hello ?");
     $.get(
-        "http://localhost:3000/api/transactions/Last",
+        "http://localhost:3000/api/transactions/Last?user=dan.pribble@enron.com",
         //{paramOne : 1, paramX : 'abc'},
         function(data) {
           for (var i = 0; i < data.length; i++) {
@@ -72,7 +72,7 @@ function addRetrievedItem(transaction) {
   div1_2_1.className = "text-center";
   let buy = document.createElement("a");
   buy.className = "btn btn-outline-dark mt-auto";
-  buy.href = "shopItem.html?id="+transaction.id;
+  buy.href = "shopItem.html?id="+transaction.itemId;
   buy.innerHTML = "Buy";
 
   div1_2_1.appendChild(buy);

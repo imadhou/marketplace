@@ -70,8 +70,8 @@ def createItemItemMatrix(length, names_output_file, matrix_output_file):
 #     plt.show()
 
 
-titles_output_file = "names.npy"
-matrix_output_file = "matrix.npy"
+titles_output_file = "recommendation/names.npy"
+matrix_output_file = "recommendation/matrix.npy"
     
 
 createItemItemMatrix(1000, titles_output_file, matrix_output_file)

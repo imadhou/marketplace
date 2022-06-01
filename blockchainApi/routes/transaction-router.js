@@ -11,5 +11,6 @@ router.get('/Last', controller.getLastTransactions);
 router.get('/:id', controller.getTransactionById);
 router.post('/query', controller.getTransactionsByquery);
 router.post('/ids', controller.getTransactionsByItemIds);
+router.post('/recommandation', controller.getRecommandation);
 
 module.exports = router;
