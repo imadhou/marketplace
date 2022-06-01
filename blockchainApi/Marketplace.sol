@@ -138,7 +138,7 @@ contract Marketplace {
         trxs = new ITransaction[](s);
         s = 0;
         for(uint i = 0; i < ids.length; i++){
-            
+
             for(uint j = 0; j < dbIds[ids[i]].length; j++){
                 ITransaction memory trx = transactions[dbIds[ids[i]][j]];
                 trxs[s] = trx;
@@ -165,7 +165,7 @@ contract Marketplace {
                 index++;
 
             }
-            
+
         }else if(compare(fromMails.operator, _in) == 0){
             uint size = 0;
             for(uint i = 0; i < fromMails.values.length; i++){
@@ -181,7 +181,7 @@ contract Marketplace {
             }
         }
         Transactions memory ts = Transactions(trxs, index);
-        return ts; 
+        return ts;
     }
     function getToTransactionsIds(StringQuery memory toMails) private view returns(Transactions memory){
         uint index = 0;
@@ -194,7 +194,7 @@ contract Marketplace {
                 index++;
 
             }
-            
+
         }else if(compare(toMails.operator, _in) == 0){
             uint size = 0;
             for(uint i = 0; i < toMails.values.length; i++){
@@ -222,7 +222,7 @@ contract Marketplace {
                 trxs[index] = types[tTypes.values[0]][index];
                 index++;
             }
-            
+
         }else if(compare(tTypes.operator, _in) == 0){
             uint size = 0;
             for(uint i = 0; i < tTypes.values.length; i++){

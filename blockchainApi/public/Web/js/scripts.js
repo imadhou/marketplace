@@ -19,10 +19,11 @@ function setAllTransactions() {
         //{paramOne : 1, paramX : 'abc'},
         function(data) {
           for (var i = 0; i < data.length; i++) {
+            console.log(data)
             addRetrievedItem(data[i]);
             //Do something
         }
-           
+
         }
     );
 }
@@ -77,7 +78,7 @@ function addRetrievedItem(transaction) {
   div1_2_1.appendChild(buy);
   div1_2.appendChild(div1_2_1);
 
-  
+
   div1.appendChild(img);
   div1.appendChild(div1_1);
   div1.appendChild(div1_2);
@@ -122,7 +123,7 @@ function addItem() {
     div1_2_1.appendChild(buy);
     div1_2.appendChild(div1_2_1);
 
-    
+
     div1.appendChild(img);
     div1.appendChild(div1_1);
     div1.appendChild(div1_2);

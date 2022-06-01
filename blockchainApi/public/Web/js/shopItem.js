@@ -59,8 +59,22 @@ function buy() {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://localhost:3000/api/transactions/", true);
         xhr.setRequestHeader('Content-Type', 'application/json');
+
+
+        xhr.responseType = 'json';
+
+        xhr.onload = function () {
+            if (xhr.readyState === xhr.DONE) {
+                if (xhr.status === 200) {
+                    window.location.href="index.html"
+                }
+            }
+        };
+
+
         xhr.send(myJSON);
-        window.location.href="index.html"
+
+
       }
     }
 }
@@ -90,7 +104,17 @@ function makeAnOffer() {
       xhr.open("POST", "http://localhost:3000/api/transactions/", true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(myJSON);
-      window.location.href="index.html"
+
+
+      xhr.responseType = 'json';
+
+      xhr.onload = function () {
+          if (xhr.readyState === xhr.DONE) {
+              if (xhr.status === 200) {
+                  window.location.href="index.html"
+              }
+          }
+      };
+      }
     }
-  }
   }
