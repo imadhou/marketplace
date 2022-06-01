@@ -221,7 +221,6 @@ contract Marketplace {
             for(uint i = 0; i < types[tTypes.values[0]].length; i++){
                 trxs[index] = types[tTypes.values[0]][index];
                 index++;
-
             }
             
         }else if(compare(tTypes.operator, _in) == 0){
@@ -229,7 +228,6 @@ contract Marketplace {
             for(uint i = 0; i < tTypes.values.length; i++){
                 size = size + types[tTypes.values[i]].length;
             }
-
             trxs = new uint256[](size);
             for(uint i = 0; i < tTypes.values.length; i++){
                 for(uint j = 0; j < types[tTypes.values[i]].length; j++){
@@ -244,20 +242,14 @@ contract Marketplace {
 
 
     function searchTransactions(StringQuery memory from, StringQuery memory to, IntQuery memory txType, string memory operator) public view returns (ITransaction[] memory){
-
         uint index = 0;
         ITransaction[] memory trxs;
-
-
         Transactions memory f = getFromTransactionsIds(from);
         Transactions memory t = getToTransactionsIds(to);
         Transactions memory tp = getTxTypesTransactionsIds(txType);
-        
         if(compare(operator,"OR") == 0){
-        
             uint size = t.size + f.size + tp.size;
             trxs = new ITransaction[](size);
-
             for(uint i = 0; i < f.size; i++){
                 trxs[index] = transactions[f.transactions[i]];
                 index++;
@@ -270,26 +262,17 @@ contract Marketplace {
                 trxs[index] = transactions[tp.transactions[i]];
                 index++;
             }
-
-
         }else{
-
             if(compare(from.field, "") != 0 && compare(to.field, "") != 0 && compare(txType.field, "") != 0){
-   
                 trxs = new ITransaction[](f.size);
-
                 for(uint i = 0; i < f.size; i++){
-                    for(uint j = 0; j < t.size; j++){
-                        if(f.transactions[i] == t.transactions[j] && intIsIn(t.transactions[j], tp.transactions) == 0){
-                            trxs[index] = transactions[f.transactions[i]];
-                            index ++;
-                        }
+                    if(intIsIn(f.transactions[i], t.transactions) == 0 && intIsIn(f.transactions[i], tp.transactions) == 0){
+                        trxs[index] = transactions[f.transactions[i]];
+                        index ++;
                     }
                 }
             }else if(compare(from.field, "") != 0 && compare(to.field, "") != 0 && compare(txType.field, "") == 0){
-  
                 trxs = new ITransaction[](f.size);
-
                 for(uint i = 0; i < f.size; i++){
                     if(intIsIn(f.transactions[i], t.transactions) == 0){
                         trxs[index] = transactions[f.transactions[i]];
@@ -297,62 +280,45 @@ contract Marketplace {
                     }
                 }
             }else if(compare(from.field, "") != 0 && compare(to.field, "") == 0 && compare(txType.field, "") != 0){
-     
+    
                 trxs = new ITransaction[](f.size);
-
                 for(uint i = 0; i < f.size; i++){
                     if(intIsIn(f.transactions[i], tp.transactions) == 0){
                         trxs[index] = transactions[f.transactions[i]];
                         index++;
                     }
                 }
-
             }else if(compare(from.field, "") != 0 && compare(to.field, "") == 0 && compare(txType.field, "") == 0){
- 
                 trxs = new ITransaction[](f.size);
                 for(uint i = 0; i < f.size; i++){
                     trxs[index] = transactions[f.transactions[i]];
                     index++;
                 }
-
             }else if(compare(from.field, "") == 0 && compare(to.field, "") != 0 && compare(txType.field, "") != 0){
-
                 trxs = new ITransaction[](t.size);
-
                 for(uint i = 0; i < t.size; i++){
                     if(intIsIn(t.transactions[i], tp.transactions) == 0){
-                        trxs[index] = transactions[f.transactions[i]];
+                        trxs[index] = transactions[t.transactions[i]];
                         index++;
                     }
                 }
-
             }else if(compare(from.field, "") == 0 && compare(to.field, "") != 0 && compare(txType.field, "") == 0){
-
                 trxs = new ITransaction[](t.size);
                 for(uint i = 0; i < t.size; i++){
                     trxs[index] = transactions[t.transactions[i]];
                     index++;
                 }
-
             }else if(compare(from.field, "") == 0 && compare(to.field, "") == 0 && compare(txType.field, "") != 0){
-
                 trxs = new ITransaction[](tp.size);
                 for(uint i = 0; i < tp.size; i++){
                     trxs[index] = transactions[tp.transactions[i]];
                     index++;
                 }
-
             }
-
         }
 
         return trxs;
     }
-
-
-
-
-
 
     function stringIsIn(string memory value, string[] memory values) private pure returns(int256){
         for(uint i = 0; i < values.length; i++){

@@ -6,19 +6,13 @@ const trxsRepo = require('./repository/transaction-repository');
 const initilaize = async () =>{
     
     const users = await init.getUsersToInit();
+    for(var i = 0; i < users.length; i += 100){
+        const u = users.slice(i, i+ 100);
+        const d = await userRepo.initUsers(u);
+        console.log(d.events.insertedUser);
+    }
 
-    for(var i = 0; i < users.length; i += 50){
-    const u = users.slice(i, i+ 50);
-    const d = await userRepo.initUsers(u);
-    console.log(d.events.insertedUser);
-    }
-  
-    const trxs = await init.getTransactionsToInit();
-    for(var i = 0; i < trxs.length; i += 50){
-        const t = trxs.slice(i, i+ 50);
-        const d = await trxsRepo.initTransactions(t);
-        console.log(d.events.insertedTransaction);
-    }
+    const d = await trxsRepo.initTransactions();
     process.exit(0);
 }
 

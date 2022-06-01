@@ -1,5 +1,8 @@
 const Web3 = require('web3');
 var mysql = require('mysql');
+const util = require('util');
+const users = require('../initDataBases/init');
+
 
 const web3 = new Web3(Web3.givenProvider || process.env.WSPROVIDER);
 const contract = new web3.eth.Contract(require('./../abi.json'));
@@ -129,20 +132,25 @@ exports.getTransactionById = async (id) =>{
     return trx;
 }
 exports.searchTransactions = async (query) =>{
-    const data = await contract.methods.searchTransactions(query.from, query.to, query.txType, query.operator).call();
-    trxs = data.map(data => {
-        return {
-            id: data.id,
-            from: data.from,
-            to: data.to,
-            itemId: data.itemId,
-            price: data.price,
-            txType: data.txType,
-            date: new Date(data.date * 1000)
-        }
-    });
-    trxs = trxs.filter(t => t.to !=0);
-    return trxs;
+    try{
+        const data = await contract.methods.searchTransactions(query.from, query.to, query.txType, query.operator).call();
+        trxs = data.map(data => {
+            return {
+                id: data.id,
+                from: data.from,
+                to: data.to,
+                itemId: data.itemId,
+                price: data.price,
+                txType: data.txType,
+                date: new Date(data.date * 1000)
+            }
+        });
+        trxs = trxs.filter(t => t.txType != 0);
+        return trxs;
+    }
+    catch(err){
+        console.log(err)
+    }
 }
 
 exports.listenToInsertedEvents = async ()=>{
@@ -176,11 +184,128 @@ exports.getTransactionsByItemIds = async (query)=>{
     return trxs;
 }
 
-exports.initTransactions = async (transactions) =>{
-    const date = Math.round((new Date()).getTime()/1000);
-    const d = await contract
-    .methods
-    .initTransactions(transactions)
-    .send({ from: account });
-    return d;
+exports.initTransactions = async () =>{
+    const usersData = await users.getUsersToInit();
+    const query = util.promisify(con.query).bind(con);
+    const sqlQuery = "SELECT id, product_price FROM product";
+    const data = await query(sqlQuery);
+    const trxs = [];
+    data.map(d => {
+        const date = Math.round((new Date()).getTime()/1000);
+        let price = parseInt(d.product_price.substr(1));
+        if(!price){
+            price = 10;
+        }
+        const fromId = Math.floor(Math.random()*(148 - 1) +1);
+        const fromId2 = Math.floor(Math.random()*(148 - 1) +1);
+        const fromId3 = Math.floor(Math.random()*(148 - 1) +1);
+
+
+        let toId = Math.floor(Math.random()*(148 - 1) + 1);
+        while(toId === fromId){
+            toId = Math.floor(Math.random()*(148 - 1) + 1);
+        }
+        const from = usersData.find(u => u.id === fromId).email;
+        const from2 = usersData.find(u => u.id === fromId2).email;
+        const from3 = usersData.find(u => u.id === fromId3).email;        
+        trxs.push({
+            id: 0,
+            price,
+            from,
+            to: "",
+            txType: 1,
+            date,
+            itemId: d.id
+            });
+
+        //offer
+        const istr2 = Math.floor(Math.random() * 2); 
+        //purchase
+        const istr3 = Math.floor(Math.random() * 2);
+        //seller reject
+        const istr4 = Math.floor(Math.random() * 2);
+        //buyer cancel
+        const istr5 = Math.floor(Math.random() * 2);
+        //seller accepts
+        const istr6 = Math.floor(Math.random() * 2);
+
+        const proposedPrice = Math.abs(price + Math.floor(Math.random() * (10 + 10) -10));
+        if(istr2){
+            trxs.push({
+                id: 0,
+                price: proposedPrice,
+                from: from2,
+                to: from,
+                txType: 2,
+                date: date+60*60*5,
+                itemId: d.id
+            })
+        }
+
+        if(istr3){
+            trxs.push({
+                id: 0,
+                price,
+                from: from3,
+                to: from,
+                txType: 3,
+                date: date+60*60*5,
+                itemId: d.id
+            })
+        }
+        if(istr3 && istr4){
+            trxs.push({
+                id: 0,
+                price: proposedPrice,
+                from: from2,
+                to: from,
+                txType: 4,
+                date: date+60*60*5,
+                itemId: d.id
+            })
+        }
+
+        if(istr3 && istr5){
+            trxs.push({
+                id: 0,
+                price,
+                from: from3,
+                to: from,
+                txType: 5,
+                date: date+60*60*5,
+                itemId: d.id
+            })
+        }
+        if(istr3 && !istr4 && !istr5 && istr6){
+            trxs.push({
+                id: 0,
+                price,
+                from: from3,
+                to: from,
+                txType: 6,
+                date: date+60*60*5,
+                itemId: d.id
+            })
+        }
+        if(istr2 && !istr4 && !istr5 && istr6){
+            trxs.push({
+                id: 0,
+                price: proposedPrice,
+                from: from2,
+                to: from,
+                txType: 6,
+                date: date+60*60*5,
+                itemId: d.id
+            })
+        }
+    })
+    for(let i = 0; i < trxs.length; i += 300){
+        ts = trxs.slice(i, i+300);
+        const d = await contract
+        .methods
+        .initTransactions(ts)
+        .send({ from: account});
+        console.log(d);
+    }
+
 }
