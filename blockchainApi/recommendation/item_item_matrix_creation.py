@@ -74,4 +74,4 @@ titles_output_file = "recommendation/names.npy"
 matrix_output_file = "recommendation/matrix.npy"
     
 
-createItemItemMatrix(1000, titles_output_file, matrix_output_file)
+createItemItemMatrix(10000, titles_output_file, matrix_output_file)
