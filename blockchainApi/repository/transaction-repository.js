@@ -186,6 +186,71 @@ exports.getTransactionsByItemIds = async (query)=>{
     return trxs;
 }
 
+exports.getTransactionsByProductNames = async (name)=>{
+    const sqlQuery = "SELECT * FROM product WHERE product_name LIKE '%"+name+"%'";
+    const DBData = await query(sqlQuery);
+    //console.log(DBData[0]);
+    let ids  = DBData.map(transaction => transaction.id);
+    //console.log(ids);
+    //console.log(typeof(ids[0]))
+    const data = await contract.methods.getTransactionsByItemIds(/*query.*/ids).call();
+    trxs = data.map(data => {
+        return {
+            id: data.id,
+            from: data.from,
+            to: data.to,
+            itemId: data.itemId,
+            price: data.price,
+            txType: data.txType,
+            date: new Date(data.date * 1000)
+        }
+    });
+
+    let filteredTransactions = []
+
+    for ( let i = 0; i < trxs.length; i++ ) {
+        if ( ids.includes(parseInt(trxs[i].id)) ) {
+            //console.log("match "+trxs[i].id)
+            filteredTransactions.push(getData(DBData, trxs[i].id, trxs[i].price))
+            //console.log(getData(DBData, trxs[i].id))
+        }
+    }
+    
+    // let filteredTransaction = trxs.filter(tr => {
+    //     //console.log(tr.id+" "+typeof(tr.id))
+    //     if ( ids.includes(parseInt(tr.id)) ) {
+    //         console.log("match "+tr.id)
+    //         //return getData(DBData, tr.id)
+    //         console.log(getData(DBData, tr.id)) 
+    //         return null
+    //     }
+    // })
+    return filteredTransactions;
+    // return DBData;
+}
+
+function getData(data, id, price) {
+    for ( let i = 0; i < data.length; i++ ) {
+        //console.log(typeof (data[i].id) + "  " + typeof(id))
+        if ( data[i].id === parseInt(id) ) {
+            //console.log(data[i])
+            //return data[i];
+            
+            return {
+                id : data[i].id,
+                product_id : data[i].product_id,
+                product_name : data[i].product_name,
+                product_category : data[i].product_category,
+                product_description : data[i].product_description,
+                product_specification : data[i].product_specification,
+                product_img : data[i].product_img,
+                product_price : data[i].product_price,
+                price : price
+            }
+        }
+    }
+}
+
 exports.initTransactions = async () =>{
     const usersData = await users.getUsersToInit();
     const sqlQuery = "SELECT id, product_price FROM product";

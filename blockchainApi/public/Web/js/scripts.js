@@ -28,16 +28,25 @@ function setAllTransactions() {
     );
 }
 
+function removeAllItems() {
+
+}
+
 function search() {
   let searchWord = document.getElementById("search").value;
   console.log(searchWord);
-    // $.get(
-    //     "http://localhost:3000/api/transactions",
-    //     //{paramOne : 1, paramX : 'abc'},
-    //     function(data) {
-    //        alert('page content: ' + data);
-    //     }
-    // );
+    $.get(
+        "http://localhost:3000/api/transactions/products/name/"+searchWord,
+        //{paramOne : 1, paramX : 'abc'},
+        function(data) {
+           console.log(data);
+           let itemContainer = document.getElementById("itemContainer");
+           while (itemContainer.firstChild) itemContainer.removeChild(itemContainer.firstChild);
+           for ( let i = 0; i < data.length; i++ ) {
+            addRetrievedItem(data[i]);
+           }
+        }
+    );
 }
 
 function addRetrievedItem(transaction) {

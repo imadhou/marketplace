@@ -95,3 +95,9 @@ exports.getRecommandation = async(req, res, next) =>{
     data = await bc.getLastTransactions(d.data.slice(0,20));
     res.send(data);
 }
+
+exports.getTransactionsByProductNames = async(req, res, next) =>{
+    const d = await bc.getTransactionsByProductNames(req.params.name);
+    console.log(d)
+    res.send(d)
+}
