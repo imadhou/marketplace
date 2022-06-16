@@ -25,12 +25,53 @@ function getTransaction(id) {
           productPrice = document.getElementById("productPrice");
           productImage = document.getElementById("productImage");
           productName.innerHTML = data.product_name;
+          //console.log(data.product_name)
           productSeller.innerHTML = data.from;
           productPrice.innerHTML = data.price + " € ";
           productDescription.innerHTML = data.product_description;
           productImage.src = data.product_img;
+
+
+
+
+          const obj = {item: data.product_name};
+          //console.log(data.product_name)
+          //const obj = {item: globalName};
+          myJSON = JSON.stringify(obj);
+          console.log(obj)
+
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "http://localhost:3000/api/transactions/recommandation", true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+
+
+          xhr.responseType = 'json';
+
+          xhr.onload = function () {
+              if (xhr.readyState === xhr.DONE) {
+                  if (xhr.status === 200) {
+                      //window.location.href="index.html"
+                      console.log(xhr.response)
+                      for ( let i = 1; i < 5; i++ ) {
+                        document.getElementById("relatedIMG"+i).src = xhr.response[i].product_img;
+                        document.getElementById("relatedTitle"+i).innerHTML = xhr.response[i].product_name;
+                        document.getElementById("relatedPrice"+i).innerHTML = xhr.response[i].price + "€";
+                        document.getElementById("relatedLink"+i).href = "http://localhost:3000/Web/shopItem.html?id=" + xhr.response[i].itemId;
+                      }
+                      
+                  }
+              }
+          };
+
+
+          xhr.send(myJSON);
+
+
+
+
         }
   );
+  
 }
 
 function buy() {

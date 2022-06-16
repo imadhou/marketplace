@@ -89,15 +89,17 @@ exports.getRecommandation = async(req, res, next) =>{
         method: "POST",
         url: url,
         data: {
-            items: [req.item]
+            items: [req.body.item]
         }
     });
+    if ( d.data.length === 0 ) {
+        return res.send();
+    }
     data = await bc.getLastTransactions(d.data.slice(0,20));
     res.send(data);
 }
 
 exports.getTransactionsByProductNames = async(req, res, next) =>{
     const d = await bc.getTransactionsByProductNames(req.params.name);
-    console.log(d)
     res.send(d)
 }
