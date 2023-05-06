@@ -1,7 +1,12 @@
 # Blockchain based marketplace  
 
-pour rereinitialiser : supprimer le dossier geth dans bcData puis
- geth --datadir bcData init bcData/706.json -> changer juste les paths vers bcData
+Welcome to the blockchain-based marketplace project developed as part of my 1st year of master's degree. This project aims to create a secure and transparent platform for buying and selling goods and services online, using the power of blockchain technology.
+
+The platform is designed to provide a seamless and efficient marketplace experience, while eliminating the need for intermediaries such as banks or other financial institutions. The decentralized platform enables buyers and sellers to interact directly, while the blockchain technology provides a secure and transparent record of all transactions.
+
+The marketplace platform is user-friendly and accessible to everyone, and supports multiple payment options, including cryptocurrency. The platform is built using [Ethereum / Geth / Web3JS / Javascript / NodeJS]
+
+Please feel free to explore the code and contribute to the project. If you have any questions or feedback, don't hesitate to reach out!
 
 
 ./geth --datadir C:\Users\toyoy\Documents\GitHub\marketplace\blockchainApi\bcData init C:\Users\toyoy\Documents\GitHub\marketplace\blockchainApi\bcData\706.json
