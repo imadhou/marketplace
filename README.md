@@ -1,4 +1,4 @@
-# marketplace  
+# Blockchain based marketplace  
 
 pour rereinitialiser : supprimer le dossier geth dans bcData puis
  geth --datadir bcData init bcData/706.json -> changer juste les paths vers bcData
